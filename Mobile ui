@@ -1,4 +1,3 @@
-local BlindHubsUiLibrary = (function()
 --[[
     BlindHubsUiLibrary: A Foundational Custom UI Library
     Version 20.0.54: Final Version (Packaged & Complete with Safeguards)
@@ -1727,7 +1726,7 @@ function BlindHubsUiLibrary.CreateWindow(options)
 	end)
 
 	toggleButtonContainer.InputChanged:Connect(function(input)
-		if isDragging and buttonStartPosUDim and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		if isDragging and buttonStartPosUDim and (input.UserInputType == Enum.UserInputType.MouseMovement or inputObject.UserInputType == Enum.UserInputType.Touch) then
 			local delta = input.Position - dragStartMousePos
 			toggleButtonContainer.Position = UDim2.new(buttonStartPosUDim.X.Scale, buttonStartPosUDim.X.Offset + delta.X, buttonStartPosUDim.Y.Scale, buttonStartPosUDim.Y.Offset + delta.Y)
 		end
@@ -1772,7 +1771,7 @@ end
 function BlindHubsUiLibrary.CreateDefaultWindow()
 	local baseTitle = "BlindHubOfficial:"
 	
-	-- MODIFICATION: Safely get the game name
+	-- Safely get the game name
 	local success, gameName = pcall(function() 
 		return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name 
 	end)
@@ -1876,58 +1875,6 @@ function BlindHubsUiLibrary.Init()
 	InitializeNotificationUI()
 end
 
+-- This line is CRITICAL for it to work as a library!
+-- It returns the library table to the loader script.
 return BlindHubsUiLibrary
-end)() -- Immediately calls the function wrapper, loading the library into the variable
-
--- ===================================================================
--- Executable Example
--- ===================================================================
--- This code will now run, as the library is loaded into the 'BlindHubsUiLibrary' variable.
-
--- 1. Initialize the library's required components (like the notification system)
-BlindHubsUiLibrary.Init()
-
--- 2. Create the default window, which includes all the example tabs and elements
-local MyWindow = BlindHubsUiLibrary.CreateDefaultWindow()
-
--- 3. You can now access the window and its elements
--- For example, to connect to the "God Mode" toggle:
-local playerTab = MyWindow.pages[MyWindow.TabContainer:FindFirstChild("Player")]
-if playerTab then
-    local godModeToggle = playerTab.page:FindFirstChild("God Mode_Toggle")
-    if godModeToggle then
-        godModeToggle.State.Changed:Connect(function(newValue)
-            print("God Mode was changed to:", newValue)
-            -- You would add your game-specific code here
-            if newValue then
-                print("God Mode Enabled!")
-            else
-                print("God Mode Disabled!")
-            end
-        end)
-    else
-        print("Could not find God Mode toggle")
-    end
-else
-    print("Could not find Player tab")
-end
-
--- You can also connect to other elements, like the Walkspeed slider
-local cheatsTab = MyWindow.pages[MyWindow.TabContainer:FindFirstChild("Cheats")]
-if cheatsTab then
-    local walkspeedSlider = cheatsTab.page:FindFirstChild("Walkspeed_Slider")
-    if walkspeedSlider then
-        walkspeedSlider.State.Changed:Connect(function(newValue)
-            print("Walkspeed changed to:", newValue)
-            -- Example: Change player walkspeed
-            -- local player = game:GetService("Players").LocalPlayer
-            -- if player and player.Character and player.Character:FindFirstChild("Humanoid") then
-            --     player.Character.Humanoid.WalkSpeed = newValue
-            -- end
-        end)
-    else
-        print("Could not find Walkspeed slider")
-    end
-else
-    print("Could not find Cheats tab")
-end
