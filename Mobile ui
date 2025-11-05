@@ -1726,7 +1726,8 @@ function BlindHubsUiLibrary.CreateWindow(options)
 	end)
 
 	toggleButtonContainer.InputChanged:Connect(function(input)
-		if isDragging and buttonStartPosUDim and (input.UserInputType == Enum.UserInputType.MouseMovement or inputObject.UserInputType == Enum.UserInputType.Touch) then
+        -- [FIXED] Changed 'inputObject' to 'input'
+		if isDragging and buttonStartPosUDim and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
 			local delta = input.Position - dragStartMousePos
 			toggleButtonContainer.Position = UDim2.new(buttonStartPosUDim.X.Scale, buttonStartPosUDim.X.Offset + delta.X, buttonStartPosUDim.Y.Scale, buttonStartPosUDim.Y.Offset + delta.Y)
 		end
